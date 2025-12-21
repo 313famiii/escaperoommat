@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Escape Room Matemático</title>
+
+  <style>
+    /* ---------------------- BASE ---------------------- */
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background: #000;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-image: url("corredor.png");
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+
+    .game {
+      width: 90%;
+      max-width: 900px;
+      background: rgba(5, 5, 5, 0.82);
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+      text-align: center;
+      position: relative;
+      backdrop-filter: blur(2px);
+    }
+
+    h1 {
+      margin-top: 0;
+      font-size: 2.5rem;
+      text-shadow: 0 0 10px #000;
+      margin-bottom: 25px;
+    }
+
+    /* ---------------------- SALA DESTACADA ---------------------- */
+    .room-id {
+      margin: 0 auto 30px auto;
+      padding: 14px 26px;
+      font-size: 1.35rem;
+      background: rgba(0,0,0,0.55);
+      border-left: 6px solid #f4d27a;
+      border-radius: 10px;
+      width: fit-content;
+      box-shadow: 0 0 12px rgba(0,0,0,0.7);
+    }
+
+    /* ---------------------- PORTAS ---------------------- */
+    .doors {
+      display: flex;
+      justify-content: center;
+      gap: 50px;
+      margin-bottom: 25px;
+      margin-top: 10px;
+    }
+
+    .door {
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      width: 40%;
+      max-width: 260px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .door:hover {
+      transform: scale(1.05);
+    }
+
+    .door-img {
+      width: 100%;
+      border-radius: 8px;
+      box-shadow: none;
+      display: block;
+    }
+
+    .option-label {
+      margin-top: 10px;
+      font-size: 1.1rem;
+      background: rgba(0,0,0,0.6);
+      padding: 6px 12px;
+      border-radius: 8px;
+    }
+
+    .shake {
+      animation: shake 0.45s;
+    }
+
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-6px); }
+      50% { transform: translateX(6px); }
+      75% { transform: translateX(-4px); }
+      100% { transform: translateX(0); }
+    }
+
+    /* ---------------------- PERGUNTA ---------------------- */
+    .question {
+      background: rgba(0,0,0,0.55);
+      padding: 22px;
+      border-radius: 14px;
+      margin: 20px auto 28px auto;
+      font-size: 1.2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      max-width: 750px;
+    }
+
+    .matrix {
+      display: inline-grid;
+      gap: 8px 16px;
+      padding: 12px 18px;
+      border-left: 3px solid #fff;
+      border-right: 3px solid #fff;
+      margin-top: 12px;
+      font-size: 1.2rem;
+    }
+
+    .system {
+      margin-top: 12px;
+      font-size: 1.1rem;
+    }
+
+    .method-tag {
+      margin-top: 10px;
+      font-size: 1rem;
+      opacity: 0.9;
+      font-style: italic;
+    }
+
+    /* ---------------------- FEEDBACK ---------------------- */
+    .feedback {
+      margin-top: 10px;
+      font-size: 1.25rem;
+      min-height: 1.3em;
+    }
+
+    .success { color: #8bc34a; }
+    .error { color: #ff6b6b; }
+
+    /* ---------------------- BOTÃO SEGUINTE ---------------------- */
+    .next-btn {
+      margin-top: 18px;
+      background: none;
+      border: 1px solid #fff;
+      color: #fff;
+      padding: 10px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: none;
+      font-size: 1.1rem;
+    }
+
+    .next-btn:hover {
+      background: rgba(255,255,255,0.15);
+    }
+
+    /* ---------------------- ECRÃ FINAL ---------------------- */
+    .end-screen {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.9);
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .restart-btn {
+      margin-top: 20px;
+      background: #4caf50;
+      border: none;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .restart-btn:hover {
+      background: #66bb6a;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ---------------------- FORMATO MÓVEL 9:16 ---------------------- */
+    @media screen and (max-width: 480px) and (max-aspect-ratio: 9/16) {
+
+      .game {
+        width: 100%;
+        height: 100vh;
+        padding: 18px;
+        border-radius: 0;
+        box-shadow: none;
+      }
+
+      h1 {
+        font-size: 1.8rem;
+        margin-bottom: 15px;
+      }
+
+      .room-id {
+        font-size: 1.1rem;
+        padding: 10px 18px;
+        margin-bottom: 20px;
+      }
+
+      .doors {
+        flex-direction: column;
+        gap: 25px;
+        margin-bottom: 20px;
+      }
+
+      .door {
+        width: 80%;
+      }
+
+      .option-label {
+        font-size: 1rem;
+        padding: 5px 10px;
+      }
+
+      .question {
+        font-size: 1rem;
+        padding: 16px;
+        margin-bottom: 20px;
+      }
+
+      .matrix {
+        font-size: 1rem;
+        gap: 6px 12px;
+        padding: 10px 14px;
+      }
+
+      .feedback {
+        font-size: 1.1rem;
+      }
+
+      .next-btn {
+        padding: 10px 20px;
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="game">
+    <h1>Escape Room Matemático</h1>
+
+    <div class="room-id" id="roomId"></div>
+
+    <div class="doors">
+      <div class="door" id="door1">
+        <img src="porta-fechada.png" class="door-img" id="img1">
+        <div class="option-label" id="label1"></div>
+      </div>
+      <div class="door" id="door2">
+        <img src="porta-fechada.png" class="door-img" id="img2">
+        <div class="option-label" id="label2"></div>
+      </div>
+    </div>
+
+    <div class="question" id="question"></div>
+
+    <div class="feedback" id="feedback"></div>
+
+    <button class="next-btn" id="nextBtn">Seguinte</button>
+
+    <div class="end-screen" id="endScreen">
+      <h2>Parabéns!</h2>
+      <p>Escapaste da masmorra matemática medieval!</p>
+      <button class="restart-btn" id="restartBtn">Jogar novamente</button>
+    </div>
+  </div>
+
+  <script>
+    /* ---------------------- CORES POR SALA ---------------------- */
+    const roomColors = [
+      { border: "#f4d27a", bg: "rgba(120, 80, 20, 0.45)" },
+      { border: "#7bdff2", bg: "rgba(40, 80, 120, 0.45)" },
+      { border: "#ff9e7a", bg: "rgba(120, 60, 40, 0.45)" },
+      { border: "#c3f584", bg: "rgba(60, 100, 40, 0.45)" },
+      { border: "#d29eff", bg: "rgba(80, 40, 110, 0.45)" }
+    ];
+
+    /* ---------------------- PERGUNTAS ---------------------- */
+    const rooms = [
+      {
+        title: "Sala 1 — Portão dos Determinantes",
+        variations: [
+          { q: "Calcula o determinante da matriz 2×2:", matrix: [[1,2],[3,4]], method: "Determinante 2×2", correct: "-2", options: ["-2","2"] },
+          { q: "Calcula o determinante da matriz 2×2:", matrix: [[2,1],[3,5]], method: "Determinante 2×2", correct: "7", options: ["5","7"] },
+          { q: "Calcula o determinante da matriz 2×2:", matrix: [[0,2],[3,1]], method: "Determinante 2×2", correct: "-6", options: ["-6","6"] }
+        ]
+      },
+
+      {
+        title: "Sala 2 — Câmara de Sarrus",
+        variations: [
+          { q: "Calcula o determinante usando Sarrus:", matrix: [[1,2,3],[0,1,4],[5,6,0]], method: "Sarrus", correct: "1", options: ["1","-1"] },
+          { q: "Aplica a regra de Sarrus:", matrix: [[2,0,1],[1,3,2],[0,1,1]], method: "Sarrus", correct: "3", options: ["3","5"] },
+          { q: "Calcula o determinante pela regra de Sarrus:", matrix: [[1,1,0],[2,1,1],[0,1,2]], method: "Sarrus", correct: "3", options: ["-3","3"] }
+        ]
+      },
+
+      {
+        title: "Sala 3 — Teorema de Laplace",
+        variations: [
+          { q: "Calcula o determinante usando Laplace:", matrix: [[1,0,2],[0,3,0],[4,0,5]], method: "Laplace", correct: "-9", options: ["-9","9"] },
+          { q: "Calcula o determinante usando Laplace:", matrix: [[2,1,0],[0,1,3],[1,0,2]], method: "Laplace", correct: "3", options: ["-3","3"] },
+          { q: "Determina o valor do determinante:", matrix: [[3,0,1],[2,1,0],[0,1,2]], method: "Laplace", correct: "7", options: ["5","7"] }
+        ]
+      },
+
+      {
+        title: "Sala 4 — Câmara de Cramer",
+        variations: [
+          { q: "Resolve o sistema. Qual é x?", system: ["x + y = 5","x − y = 1"], method: "Cramer", correct: "3", options: ["3","2"] },
+          { q: "Resolve o sistema. Qual é y?", system: ["2x + y = 4","x − y = 1"], method: "Cramer", correct: "1", options: ["1","2"] },
+          { q: "Usa Cramer para encontrar x:", system: ["3x + y = 7","x − y = 1"], method: "Cramer", correct: "2", options: ["2","3"] }
+        ]
+      },
+
+      {
+        title: "Sala 5 — Sala Final",
+        variations: [
+          { q: "Último desafio – Determinante 3×3:", matrix: [[3,1,2],[2,0,1],[1,4,5]], method: "Sarrus", correct: "15", options: ["15","-15"] },
+          { q: "Desafio final – Determinante:", matrix: [[1,2,1],[0,1,3],[2,1,0]], method: "Sarrus", correct: "-7", options: ["-7","7"] },
+          { q: "Determina o determinante (Sarrus):", matrix: [[4,1,2],[0,3,5],[1,2,1]], method: "Sarrus", correct: "9", options: ["9","-9"] }
+        ]
+      }
+    ];
+
+    /* ---------------------- ELEMENTOS ---------------------- */
+    const roomIdEl = document.getElementById('roomId');
+    const questionEl = document.getElementById('question');
+    const door1 = document.getElementById('door1');
+    const door2 = document.getElementById('door2');
+    const img1 = document.getElementById('img1');
+    const img2 = document.getElementById('img2');
+    const label1 = document.getElementById('label1');
+    const label2 = document.getElementById('label2');
+    const feedbackEl = document.getElementById('feedback');
+    const nextBtn = document.getElementById('nextBtn');
+    const endScreenEl = document.getElementById('endScreen');
+    const restartBtn = document.getElementById('restartBtn');
+
+    let currentRoom = 0;
+    const roomState = rooms.map(room => ({
+      remaining: room.variations.map((_, i) => i)
+    }));
+    let currentVariationIndex = null;
+    let inputLocked = false;
+
+    /* ---------------------- FUNÇÕES ---------------------- */
+    function pickVariationIndex(roomIndex) {
+      const state = roomState[roomIndex];
+      if (state.remaining.length === 0) {
+        state.remaining = rooms[roomIndex].variations.map((_, i) => i);
+      }
+      const randPos = Math.floor(Math.random() * state.remaining.length);
+      const idx = state.remaining[randPos];
+      state.remaining.splice(randPos, 1);
+      return idx;
+    }
+
+    function applyRoomColor(index) {
+      const color = roomColors[index] || roomColors[0];
+      roomIdEl.style.borderLeftColor = color.border;
+      roomIdEl.style.backgroundColor = color.bg;
+    }
+
+    function renderQuestion(roomIndex, variationIndex) {
+      const room = rooms[roomIndex];
+      const variation = room.variations[variationIndex];
+
+      applyRoomColor(roomIndex);
+
+      roomIdEl.textContent = room.title;
+      questionEl.innerHTML = "";
+      feedbackEl.textContent = "";
+      feedbackEl.className = "feedback";
+      nextBtn.style.display = "none";
+      inputLocked = false;
+
+      img1.src = "porta-fechada.png";
+      img2.src = "porta-fechada.png";
+
+      const title = document.createElement('strong');
+      title.textContent = variation.q;
+      questionEl.appendChild(title);
+
+      if (variation.matrix) {
+        const size = variation.matrix.length;
+        const grid = document.createElement('div');
+        grid.className = 'matrix';
+        grid.style.gridTemplateColumns = `repeat(${size}, auto)`;
+        variation.matrix.flat().forEach(v => {
+          const s = document.createElement('span');
+          s.textContent = v;
+          grid.appendChild(s);
+        });
+        questionEl.appendChild(grid);
+      }
+
+      if (variation.system) {
+        const sys = document.createElement('div');
+        sys.className = 'system';
+        variation.system.forEach(eq => {
+          const line = document.createElement('div');
+          line.textContent = eq;
+          sys.appendChild(line);
+        });
+        questionEl.appendChild(sys);
+      }
+
+      if (variation.method) {
+        const m = document.createElement('div');
+        m.className = 'method-tag';
+        m.textContent = `Método: ${variation.method}`;
+        questionEl.appendChild(m);
+      }
+
+      label1.textContent = `Opção A: ${variation.options[0]}`;
+      label2.textContent = `Opção B: ${variation.options[1]}`;
+            door1.onclick = () => !inputLocked && checkAnswer(variation, variation.options[0], door1, img1);
+      door2.onclick = () => !inputLocked && checkAnswer(variation, variation.options[1], door2, img2);
+    }
+
+    function loadRoom() {
+      currentVariationIndex = pickVariationIndex(currentRoom);
+      renderQuestion(currentRoom, currentVariationIndex);
+    }
+
+    function checkAnswer(variation, answer, doorEl, imgEl) {
+      inputLocked = true;
+
+      if (answer === variation.correct) {
+        feedbackEl.textContent = "Resposta correta! Quando estiveres pronto, clica em 'Seguinte'.";
+        feedbackEl.className = "feedback success";
+
+        imgEl.src = "porta-fechada.png";
+        setTimeout(() => imgEl.src = "porta-meia.png", 300);
+        setTimeout(() => imgEl.src = "porta-aberta.png", 900);
+
+        nextBtn.style.display = "inline-block";
+
+      } else {
+        feedbackEl.textContent = "Resposta errada! Nova pergunta nesta sala.";
+        feedbackEl.className = "feedback error";
+
+        doorEl.classList.add("shake");
+        setTimeout(() => {
+          doorEl.classList.remove("shake");
+          loadRoom();
+        }, 800);
+      }
+    }
+
+    nextBtn.onclick = () => {
+      feedbackEl.textContent = "";
+      nextBtn.style.display = "none";
+
+      currentRoom++;
+      if (currentRoom < rooms.length) {
+        loadRoom();
+      } else {
+        endScreenEl.style.display = 'flex';
+      }
+    };
+
+    restartBtn.onclick = () => {
+      currentRoom = 0;
+      rooms.forEach((room, i) => {
+        roomState[i].remaining = room.variations.map((_, idx) => idx);
+      });
+      endScreenEl.style.display = 'none';
+      loadRoom();
+    };
+
+    loadRoom();
+  </script>
+</body>
+</html>
