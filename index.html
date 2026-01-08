@@ -315,24 +315,24 @@
         variations: [
           { q: "Calcula o determinante usando Sarrus:", matrix: [[1,2,3],[0,1,4],[5,6,0]], method: "Sarrus", correct: "1", options: ["1","-1"] },
           { q: "Aplica a regra de Sarrus:", matrix: [[2,0,1],[1,3,2],[0,1,1]], method: "Sarrus", correct: "3", options: ["3","5"] },
-          { q: "Calcula o determinante pela regra de Sarrus:", matrix: [[1,1,0],[2,1,1],[0,1,2]], method: "Sarrus", correct: "3", options: ["-3","3"] }
+          { q: "Calcula o determinante pela regra de Sarrus:", matrix: [[1,1,0],[2,1,1],[0,1,2]], method: "Sarrus", correct: "-3", options: ["-3","3"] }
         ]
       },
 
       {
-        title: "Sala 3 — Teorema de Laplace",
+        title: "Sala 3 — Corredor de Laplace",
         variations: [
           { q: "Calcula o determinante usando Laplace:", matrix: [[1,0,2],[0,3,0],[4,0,5]], method: "Laplace", correct: "-9", options: ["-9","9"] },
-          { q: "Calcula o determinante usando Laplace:", matrix: [[2,1,0],[0,1,3],[1,0,2]], method: "Laplace", correct: "3", options: ["-3","3"] },
-          { q: "Determina o valor do determinante:", matrix: [[3,0,1],[2,1,0],[0,1,2]], method: "Laplace", correct: "7", options: ["5","7"] }
+          { q: "Calcula o determinante usando Laplace:", matrix: [[2,1,0],[0,1,3],[1,0,2]], method: "Laplace", correct: "7", options: ["7","3"] },
+          { q: "Determina o valor do determinante:", matrix: [[3,0,1],[2,1,0],[0,1,2]], method: "Laplace", correct: "8", options: ["5","8"] }
         ]
       },
 
       {
         title: "Sala 4 — Câmara de Cramer",
         variations: [
-          { q: "Resolve o sistema. Qual é x?", system: ["x + y = 5","x − y = 1"], method: "Cramer", correct: "3", options: ["3","2"] },
-          { q: "Resolve o sistema. Qual é y?", system: ["2x + y = 4","x − y = 1"], method: "Cramer", correct: "1", options: ["1","2"] },
+          { q: "Resolve o sistema. Qual é o valor de x?", system: ["x + y = 5","x − y = 1"], method: "Cramer", correct: "3", options: ["3","2"] },
+          { q: "Resolve o sistema. Qual é o valor de y?", system: ["2x + y = 4","x − y = 1"], method: "Cramer", correct: "2/3", options: ["1/5","2/3"] },
           { q: "Usa Cramer para encontrar x:", system: ["3x + y = 7","x − y = 1"], method: "Cramer", correct: "2", options: ["2","3"] }
         ]
       },
@@ -340,9 +340,9 @@
       {
         title: "Sala 5 — Sala Final",
         variations: [
-          { q: "Último desafio – Determinante 3×3:", matrix: [[3,1,2],[2,0,1],[1,4,5]], method: "Sarrus", correct: "15", options: ["15","-15"] },
-          { q: "Desafio final – Determinante:", matrix: [[1,2,1],[0,1,3],[2,1,0]], method: "Sarrus", correct: "-7", options: ["-7","7"] },
-          { q: "Determina o determinante (Sarrus):", matrix: [[4,1,2],[0,3,5],[1,2,1]], method: "Sarrus", correct: "9", options: ["9","-9"] }
+          { q: "Último desafio – Determinante 3×3:", matrix: [[3,1,2],[2,0,1],[1,4,5]], method: "Sarrus", correct: "-5", options: ["-5","-15"] },
+          { q: "Desafio final – Determinante:", matrix: [[1,2,1],[0,1,3],[2,1,0]], method: "Sarrus", correct: "7", options: ["-7","7"] },
+          { q: "Determina o determinante (Sarrus):", matrix: [[4,1,2],[0,3,5],[1,2,1]], method: "Sarrus", correct: "-29", options: ["-29","-9"] }
         ]
       }
     ];
